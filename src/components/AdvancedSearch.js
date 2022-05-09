@@ -22,19 +22,13 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
     let alignmentList = [];
     let categoriesString = [];
     let minWidth, minHeight, sfw;
-
-    
-    
-      if (event.target.photo.checked){imageTypeList.push("photo")}
-      if (event.target.illustration.checked){imageTypeList.push("illustration")}
-      if (event.target.vector.checked){imageTypeList.push("vector")}
-      let imageTypeString = "&image_type="+imageTypeList.join("+");
-    
-    
-      if (event.target.vertical){alignmentList.push("vertical")}
-      if (event.target.orizzontal){alignmentList.push("horizontal")}
-      let alignmentString = "&orientation=" + alignmentList.join("+");
-    
+    if (event.target.photo.checked){imageTypeList.push("photo")}
+    if (event.target.illustration.checked){imageTypeList.push("illustration")}
+    if (event.target.vector.checked){imageTypeList.push("vector")}
+    let imageTypeString = "&image_type="+imageTypeList.join("+");
+    if (event.target.vertical){alignmentList.push("vertical")}
+    if (event.target.orizzontal){alignmentList.push("horizontal")}
+    let alignmentString = "&orientation=" + alignmentList.join("+");
     let categories = [];
     for(let i = 5; i < 25; i++){
       if(event.target[i].checked){categories.push(event.target[i].name)}
@@ -53,8 +47,7 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
       minWidth : minWidth,
       minHeight : minHeight,
       sfw : sfw,
-    })
-    
+    })  
   }
   
 
@@ -63,10 +56,11 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
     //creo list con key che hanno value truthy altrimenti torno null, poi uso filter per togliere i null
     let imageTypeList = Object.entries(imageType).map((e) => e[1] ? e[0] : null).filter((e) => e);
     let imageTypeString = "&image_type="+imageTypeList.join("+");
-    setSearchQ({
-      ...searchQ,
-      imageType :  imageTypeString,
-    })
+    setSearchQ((searchQ) =>  {
+      return{
+         ...searchQ,
+         imageType :  imageTypeString,
+        }})
   }, [imageType])
   
   useEffect(() => {
@@ -74,30 +68,34 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
     //creo list con key che hanno value truthy altrimenti torno null, poi uso filter per togliere i null
     let videoTypeList = Object.entries(videoType).map((e) => e[1] ? e[0] : null).filter((e) => e);
     let videoTypeString = "&video_type="+videoTypeList.join("+");
-    setSearchQ({
-      ...searchQ,
-      videoType :  videoTypeString,
-    })
+    setSearchQ((searchQ) =>  {
+      return{
+         ...searchQ,
+         videoType :  videoTypeString,
+        }})
   }, [videoType])
   
   useEffect(() => {
     firstRender.current = false;
     //creo list con key che hanno value truthy altrimenti torno null, poi uso filter per togliere i null
     let orientationList = Object.entries(orientation).map((e) => e[1] ? e[0] : null).filter((e) => e);
-    //console.log(orientationList);
     let orientationString = "&orientation="+orientationList.join("+");
-    //console.log(orientationString);
-    setSearchQ({
-      ...searchQ,
-      orientation :  orientationString,
+
+    setSearchQ((searchQ) => {
+      return {
+        ...searchQ,
+        orientation : orientationString
+      }
     })
   }, [orientation])
 
   useEffect(() => {
     firstRender.current = false;
-    setSearchQ({
-      ...searchQ,
-      categories :  "&category="+category.join("+"),
+      setSearchQ((searchQ) => {
+        return {
+          ...searchQ,
+          categories: category.length > 0 ? "&category="+category.join("+") : "&category=all"
+        }
     })
   }, [category])
 
@@ -118,24 +116,25 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
     })
   }
 
-  useState(() => {
-    setSearchQ({
-      ...searchQ,
-      sfw : "&safesearch="+sfw,
+  useEffect(() => {
+    setSearchQ((searchQ) => {
+      return {
+        ...searchQ,
+        sfw : "&safesearch="+sfw,
+      }
     })
-  }, [])
+  }, [sfw])
 
   useEffect(() => {
     if (!firstRender.current){
-      //console.log("searchQ: ", searchQ)
       retrieveSearchQ(searchQ)
     }
   }, [searchQ])
 
+
   return (
     <>
     <p className='z-10 absolute leading-5 text-[0.5em] w-full text-left top-[26px] bg-[#b0bccb] px-2 cursor-pointer hover:text-slate-500' onClick={()=> setShowForm(!showForm)} >Advanced Search</p>
-    
     <form onSubmit={advSearch} className={`z-0 absolute top-12 px-2 w-full text-left bg-slate-400 overflow-y-auto max-h-80  smoothTransition ${showForm ? "" : "formHide"}`} >
         <div className='text-[0.5em] italic border-b border-slate-500 mt-1'>
             <p className='text-[1.3em] not-italic leading-5' >{capitalize(mediaType)} type</p>
@@ -157,8 +156,6 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
               <label htmlFor="animation" className='mr-2'>Animation</label>
               </>
             }
-
-
         </div>
         { (mediaType === "image") &&
         <div className='text-[0.5em] italic border-b border-slate-500 mt-1'>

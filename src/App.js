@@ -7,18 +7,13 @@ import Search from './components/Search';
 function App() {
   const [images, setImages] = useState([]); 
   const [isLoading, setIsLoading] = useState(true);
-  //const [term, setTerm] = useState("");
   const [searchBar, setSearchBar] = useState(false);
   const [advSearchOp, setAdvSearchOp] = useState({order: "popular"});
   const [settings, setSettings] = useState(false);
   const [mediaType, setMediaType] = useState("image");
 
- 
-
   window.addEventListener("mousedown", function(e){
-    //console.log(e);
     const isOutsideSearchBar = !(checkParents('searchBar', e.target.parentElement) || e.target.classList.contains('searchBar'));
-    //console.log("isOutsideSearchBar: ", isOutsideSearchBar)
     if (isOutsideSearchBar && searchBar){
       setSearchBar(false)
     }
@@ -43,7 +38,6 @@ function App() {
       const minWidth = advSearchOp.minWidth  || "";
       const minHeight = advSearchOp.minHeight  || "";
       const sfw = advSearchOp.sfw  || "";
-      //console.log(`Image: https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${advSearchOp.term}&per_page=100&order=${advSearchOp.order}${imageType}${orientation}${categories}${minWidth}${minHeight}${sfw}`);
       fetch(`https://pixabay.com/api/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${advSearchOp.term}&per_page=100&order=${advSearchOp.order}${imageType}${orientation}${categories}${minWidth}${minHeight}${sfw}`)
       .then((res)=> res.json())
       .then((data)=> {
@@ -55,7 +49,6 @@ function App() {
     else if (mediaType === "video"){
       const videoType = advSearchOp.videoType  || "";
       setIsLoading(true);
-      //console.log(`Video: https://pixabay.com/api/videos/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${advSearchOp.term}${videoType}`)
       fetch(`https://pixabay.com/api/videos/?key=${process.env.REACT_APP_PIXABAY_API_KEY}&q=${advSearchOp.term}${videoType}`)
       .then(res => res.json())
       .then((data) => {
@@ -71,7 +64,6 @@ function App() {
       ...advSearchOp,
       term: t,
     });
-    //console.log(advSearchOp)
   }
 
   function sendSearchBar(e){
@@ -80,12 +72,10 @@ function App() {
   }
   
   function sendSarchQ(obj){
-    //console.log("sendSarchQ", obj);
     setAdvSearchOp({
       ...advSearchOp,
       ...obj
     });
-    //console.log(advSearchOp)
   }
 
   return (
