@@ -134,8 +134,8 @@ const AdvancedSearch = ({ retrieveSearchQ, mediaType }) => {
 
   return (
     <>
-    <p className='z-10 absolute leading-5 text-[0.5em] w-full text-left top-[26px] bg-[#b0bccb] px-2 cursor-pointer hover:text-slate-500' onClick={()=> setShowForm(!showForm)} >Advanced Search</p>
-    <form onSubmit={advSearch} className={`z-0 absolute top-12 px-2 w-full text-left bg-slate-400 overflow-y-auto max-h-80  smoothTransition ${showForm ? "" : "formHide"}`} >
+    <p className='z-10 absolute leading-5 rounded-b text-[0.5em] w-full text-left top-[47px] bg-slate-400 px-2 cursor-pointer hover:text-slate-500' onClick={()=> setShowForm(!showForm)} >Advanced Search</p>
+    <form onSubmit={advSearch} className={`z-0 absolute top-[65px] px-2 w-full text-left bg-slate-400 overflow-y-auto max-h-80  smoothTransition ${showForm ? "" : "formHide"}`} >
         <div className='text-[0.5em] italic border-b border-slate-500 mt-1'>
             <p className='text-[1.3em] not-italic leading-5' >{capitalize(mediaType)} type</p>
             {(mediaType === "image") &&

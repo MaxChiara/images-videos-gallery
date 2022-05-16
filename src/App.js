@@ -1,6 +1,6 @@
 import {useState, useEffect } from 'react';
 import Card from './components/Card';
-import { FaCircleNotch, FaSlidersH } from "react-icons/fa";
+import { FaCircleNotch } from "react-icons/fa";
 import Search from './components/Search';
 
 
@@ -9,7 +9,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchBar, setSearchBar] = useState(false);
   const [advSearchOp, setAdvSearchOp] = useState({order: "popular"});
-  const [settings, setSettings] = useState(false);
+  // const [settings, setSettings] = useState(false);
   const [mediaType, setMediaType] = useState("image");
 
   window.addEventListener("mousedown", function(e){
@@ -78,29 +78,14 @@ function App() {
     });
   }
 
+  function advSearch(value){
+    setAdvSearchOp({...advSearchOp, order : value})
+  }
+
   return (
-    <div className='container mx-auto relative flex min-h-[100vh]'>
-      <div className="absolute left-6 top-2 searchBar">
-        <FaSlidersH onClick={() => setSettings((c) => !c)} className='relative top-1.5 cursor-pointer' />
-        <div className={`${settings ? '' : 'topHide'} relative smoothTransition -top-4 left-8`}>
-          <div className='text-sm inline-block' >
-            <label htmlFor="order">Display order:</label>
-            <select name="order" id="order" onChange={(e) => setAdvSearchOp({...advSearchOp, order : e.target.value})}>
-              <option value="popular">Popular</option>
-              <option value="latest">Latest</option>
-            </select>
-          </div>
-          <div className='text-sm inline-block ml-4' >
-            <label htmlFor="mediaType">Display:</label>
-            <select name="mediaType" id="mediaType" onChange={(e) => setMediaType(e.target.value)} >
-              <option value="image">Images</option>
-              <option value="video">Videos</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    <div className='container mx-auto relative flex min-h-[100vh] overflow-hidden'>
       <div className="absolute right-px max-h-[30rem] top-2 searchBar">
-        <Search sendTerm={sendTerm} sendSarchQ={sendSarchQ} sendSearchBar={sendSearchBar} searchBar={searchBar} mediaType={mediaType} />
+        <Search sendTerm={sendTerm} sendSarchQ={sendSarchQ} advSearchOp={advSearch} setMediaType={setMediaType} sendSearchBar={sendSearchBar} searchBar={searchBar} mediaType={mediaType} />
       </div>
       {isLoading ? <FaCircleNotch className='m-auto loading'/> :
         images.length > 0 ? 
